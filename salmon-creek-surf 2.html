@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Salmon Creek Surf">
+<title>Salmon Creek Surf</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep: #061828;
+  --foam: #e8f4f8;
+  --crest: #2ab4d4;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'DM Sans',sans-serif; background:var(--deep); color:var(--foam); min-height:100vh; overflow-x:hidden; }
+
+.bg { position:fixed; inset:0; z-index:0; background:linear-gradient(170deg,#061828 0%,#0a2540 50%,#0d3a5c 100%); }
+.wave { position:absolute; bottom:0; left:-50%; width:200%; height:160px; opacity:.07; animation:ws 14s linear infinite; }
+.wave:nth-child(2) { animation-duration:22s; animation-direction:reverse; opacity:.04; bottom:20px; }
+@keyframes ws { to { transform:translateX(25%); } }
+
+.app { position:relative; z-index:1; max-width:420px; margin:0 auto; padding-bottom:50px; }
+
+header { padding:54px 24px 16px; text-align:center; }
+.loc { font-size:10px; letter-spacing:4px; color:var(--crest); opacity:.65; margin-bottom:6px; text-transform:uppercase; }
+h1 { font-family:'Bebas Neue',sans-serif; font-size:54px; letter-spacing:4px; line-height:1; background:linear-gradient(135deg,#fff,var(--crest)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.sub { font-size:11px; color:#3a6a86; margin-top:3px; letter-spacing:1px; }
+
+.rcard { margin:10px 20px 0; padding:20px 22px; border-radius:22px; display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); transition:all .5s; }
+.rcard.epic { background:linear-gradient(135deg,#1a472a,#0d3020); border-color:#2ecc7166; }
+.rcard.good { background:linear-gradient(135deg,#0f3a4a,#061828); border-color:#2ab4d466; }
+.rcard.fair { background:linear-gradient(135deg,#3a2800,#1a1200); border-color:#f0a50066; }
+.rcard.poor { background:linear-gradient(135deg,#3a1010,#1a0808); border-color:#e74c3c66; }
+.rlabel { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#4a7a96; margin-bottom:4px; }
+.rval { font-family:'Bebas Neue',sans-serif; font-size:40px; letter-spacing:2px; line-height:1; }
+.rdesc { font-size:12px; color:#4a8a9a; margin-top:3px; }
+.remoji { font-size:48px; }
+
+.errbox { margin:10px 20px 0; padding:16px 18px; background:rgba(231,76,60,.08); border:1px solid rgba(231,76,60,.25); border-radius:16px; font-size:13px; color:#c06050; line-height:1.6; display:none; }
+.errbox strong { color:#e07060; display:block; margin-bottom:3px; }
+
+.sec { margin:16px 20px 0; }
+.sec-title { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#3a6a86; margin-bottom:10px; }
+
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:18px; padding:16px; }
+.cicon { font-size:20px; margin-bottom:8px; }
+.clabel { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#3a6a86; margin-bottom:3px; }
+.cval { font-family:'Bebas Neue',sans-serif; font-size:30px; line-height:1; }
+.cval span { font-family:'DM Sans',sans-serif; font-size:12px; color:#4a7a96; margin-left:2px; }
+.cdetail { font-size:11px; color:#3a6a86; margin-top:4px; }
+.bwrap { margin-top:8px; height:3px; background:rgba(255,255,255,.07); border-radius:2px; overflow:hidden; }
+.bar { height:100%; border-radius:2px; width:0%; transition:width 1.2s cubic-bezier(.4,0,.2,1); }
+
+.fstrip { display:flex; gap:8px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; }
+.fstrip::-webkit-scrollbar { display:none; }
+.fcard { flex:0 0 68px; text-align:center; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:14px; padding:12px 6px; }
+.fcard.now { border-color:var(--crest); background:rgba(42,180,212,.1); }
+.ftime { font-size:10px; color:#3a6a86; text-transform:uppercase; letter-spacing:1px; }
+.fht { font-family:'Bebas Neue',sans-serif; font-size:22px; margin:4px 0 3px; }
+.fdot { width:7px; height:7px; border-radius:50%; margin:0 auto; }
+
+.tip { margin:16px 20px 0; padding:14px 16px; background:rgba(240,165,0,.06); border:1px solid rgba(240,165,0,.15); border-radius:14px; font-size:12px; color:#907030; line-height:1.5; display:flex; gap:10px; align-items:flex-start; }
+
+.footer { text-align:center; margin-top:24px; }
+.updated { font-size:11px; color:#2a4a60; letter-spacing:1px; }
+.rbtn { margin-top:12px; display:inline-flex; align-items:center; gap:7px; background:rgba(42,180,212,.1); border:1px solid rgba(42,180,212,.3); color:var(--crest); font-family:'DM Sans',sans-serif; font-size:13px; letter-spacing:1px; padding:11px 22px; border-radius:100px; cursor:pointer; }
+.rbtn:active { background:rgba(42,180,212,.2); transform:scale(.97); }
+.spin { animation:spin 1s linear infinite; display:inline-block; }
+@keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="bg">
+  <svg class="wave" viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,80 C240,140 480,20 720,80 C960,140 1200,20 1440,80 L1440,160 L0,160Z" fill="white"/></svg>
+  <svg class="wave" viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,50 C360,110 720,0 1080,50 C1260,80 1380,30 1440,50 L1440,160 L0,160Z" fill="white"/></svg>
+</div>
+
+<div class="app">
+  <header>
+    <div class="loc">📍 Sonoma County · California</div>
+    <h1>SALMON CREEK</h1>
+    <div class="sub">38.3664°N · 123.0681°W · Beach Break</div>
+  </header>
+
+  <div class="rcard" id="rcard">
+    <div>
+      <div class="rlabel">Surf Rating</div>
+      <div class="rval" id="rval">LOADING…</div>
+      <div class="rdesc" id="rdesc">Fetching live conditions</div>
+    </div>
+    <div class="remoji" id="remoji">🌊</div>
+  </div>
+
+  <div class="errbox" id="errbox">
+    <strong>⚠️ Could not load live data</strong>
+    <span id="errmsg">Check your internet connection and tap Refresh.</span>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Current Conditions</div>
+    <div class="grid">
+      <div class="card"><div class="cicon">🌊</div><div class="clabel">Wave Height</div><div class="cval" id="waveHt">--<span>ft</span></div><div class="cdetail" id="waveD">—</div><div class="bwrap"><div class="bar" id="waveBar" style="background:#2ab4d4"></div></div></div>
+      <div class="card"><div class="cicon">⏱</div><div class="clabel">Swell Period</div><div class="cval" id="period">--<span>s</span></div><div class="cdetail" id="periodD">—</div><div class="bwrap"><div class="bar" id="periodBar" style="background:#f0a500"></div></div></div>
+      <div class="card"><div class="cicon">💨</div><div class="clabel">Wind</div><div class="cval" id="wind">--<span>mph</span></div><div class="cdetail" id="windD">—</div><div class="bwrap"><div class="bar" id="windBar" style="background:#2ecc71"></div></div></div>
+      <div class="card"><div class="cicon">〰️</div><div class="clabel">Tide</div><div class="cval" id="tide">--<span>ft</span></div><div class="cdetail" id="tideD">—</div><div class="bwrap"><div class="bar" id="tideBar" style="background:#2ab4d4"></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">8-Hour Forecast</div>
+    <div class="fstrip" id="fstrip"></div>
+  </div>
+
+  <div class="tip">
+    <span style="font-size:18px;flex-shrink:0">📲</span>
+    <span>To install on iPhone: open in <strong>Safari</strong> → tap <strong>Share ↑</strong> → <strong>Add to Home Screen</strong></span>
+  </div>
+
+  <div class="footer">
+    <div class="updated" id="updated">Connecting to Open-Meteo…</div>
+    <button class="rbtn" onclick="load()"><span id="sicon">↻</span> Refresh</button>
+  </div>
+</div>
+
+<script>
+const LAT = 38.3664, LNG = -123.0681;
+
+function compass(d) {
+  return ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(d/22.5)%16];
+}
+function setBar(id, pct, color) {
+  const el = document.getElementById(id);
+  el.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  if (color) el.style.background = color;
+}
+function rate(wft, per, wmph, wdeg) {
+  let s = 0;
+  if (wft >= 4 && wft <= 8) s += 3;
+  else if (wft > 8 && wft <= 14) s += 3;
+  else if (wft > 14) s += 2;
+  else if (wft >= 2) s += 1;
+  if (per >= 14) s += 3;
+  else if (per >= 10) s += 2;
+  else if (per >= 7) s += 1;
+  const off = wdeg >= 45 && wdeg <= 135;
+  const on  = wdeg >= 225 && wdeg <= 315;
+  if (wmph < 5) s += 3;
+  else if (off && wmph < 15) s += 2;
+  else if (off) s += 1;
+  else if (on && wmph > 15) s -= 1;
+  if (s >= 8) return {r:'EPIC', c:'epic', e:'🔥', d:'firing right now'};
+  if (s >= 6) return {r:'GOOD', c:'good', e:'🤙', d:'worth paddling out'};
+  if (s >= 4) return {r:'FAIR', c:'fair', e:'🌊', d:'marginal conditions'};
+  return {r:'POOR', c:'poor', e:'😐', d:'not ideal today'};
+}
+function dotColor(c) { return {epic:'#2ecc71',good:'#2ab4d4',fair:'#f0a500',poor:'#e74c3c'}[c]; }
+
+async function load() {
+  const si = document.getElementById('sicon');
+  si.className = 'spin';
+  document.getElementById('errbox').style.display = 'none';
+
+  try {
+    const mURL = `https://marine-api.open-meteo.com/v1/marine?latitude=${LAT}&longitude=${LNG}&hourly=wave_height,wave_period,swell_wave_height,swell_wave_direction,swell_wave_period&length_unit=imperial&timezone=America%2FLos_Angeles&forecast_days=1`;
+    const wURL = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=mph&timezone=America%2FLos_Angeles&forecast_days=1`;
+
+    const [mR, wR] = await Promise.all([fetch(mURL), fetch(wURL)]);
+    if (!mR.ok) throw new Error('Marine API ' + mR.status);
+    if (!wR.ok) throw new Error('Wind API ' + wR.status);
+    const mD = await mR.json();
+    const wD = await wR.json();
+    if (mD.error) throw new Error(mD.reason || 'Marine error');
+
+    const mH = mD.hourly, wH = wD.hourly;
+    const now = new Date(), hr = now.getHours();
+
+    const waveHft = mH.wave_height[hr] || 0;
+    const swellHft = mH.swell_wave_height[hr] || 0;
+    const per = mH.swell_wave_period[hr] || mH.wave_period[hr] || 0;
+    const swellDir = mH.swell_wave_direction[hr] || 315;
+    const windMph = wH.wind_speed_10m[hr] || 0;
+    const windDeg = wH.wind_direction_10m[hr] || 0;
+
+    // Approx tide
+    const amp = 2.8, tms = now.getTime(), tp = 6.2 * 3600000;
+    const tideFt = +(amp * Math.sin((tms / tp) * Math.PI)).toFixed(1);
+    const tideNext = +(amp * Math.sin(((tms+1800000)/tp)*Math.PI)).toFixed(1);
+    const tideDir = tideNext > tideFt ? '↑ Rising' : '↓ Falling';
+
+    // Rating
+    const info = rate(waveHft, per, windMph, windDeg);
+    document.getElementById('rcard').className = `rcard ${info.c}`;
+    document.getElementById('rval').textContent = info.r;
+    document.getElementById('rdesc').textContent = info.d;
+    document.getElementById('remoji').textContent = info.e;
+
+    // Cards
+    document.getElementById('waveHt').innerHTML = `${waveHft.toFixed(1)}<span>ft</span>`;
+    document.getElementById('waveD').textContent = `Swell: ${swellHft.toFixed(1)}ft · ${compass(swellDir)}`;
+    setBar('waveBar', (waveHft/18)*100);
+
+    document.getElementById('period').innerHTML = `${per.toFixed(0)}<span>s</span>`;
+    document.getElementById('periodD').textContent = `Dir: ${compass(swellDir)}`;
+    setBar('periodBar', (per/20)*100);
+
+    const wq = windMph < 5 ? 'Glassy ✨' : windMph < 12 ? 'Light' : windMph < 22 ? 'Moderate' : 'Strong';
+    const off = windDeg >= 45 && windDeg <= 135;
+    document.getElementById('wind').innerHTML = `${windMph.toFixed(0)}<span>mph</span>`;
+    document.getElementById('windD').textContent = `${compass(windDeg)} · ${wq}${off && windMph>3 ? ' offshore' : ''}`;
+    setBar('windBar', Math.max(0,100-(windMph/30)*100), windMph<8?'#2ecc71':windMph<20?'#f0a500':'#e74c3c');
+
+    document.getElementById('tide').innerHTML = `${tideFt}<span>ft</span>`;
+    document.getElementById('tideD').textContent = tideDir;
+    setBar('tideBar', ((tideFt+amp)/(amp*2))*100);
+
+    // Forecast
+    const strip = document.getElementById('fstrip');
+    strip.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+      const h = (hr+i)%24;
+      const fw = mH.wave_height[h]||0, fp = mH.swell_wave_period[h]||mH.wave_period[h]||0;
+      const fwmph = wH.wind_speed_10m[h]||0, fwdeg = wH.wind_direction_10m[h]||0;
+      const fi = rate(fw, fp, fwmph, fwdeg);
+      const dc = dotColor(fi.c);
+      const label = i===0 ? 'NOW' : `${h%12||12}${h<12?'am':'pm'}`;
+      const c = document.createElement('div');
+      c.className = `fcard${i===0?' now':''}`;
+      c.innerHTML = `<div class="ftime">${label}</div><div class="fht" style="color:${dc}">${fw.toFixed(1)}</div><div class="fdot" style="background:${dc}"></div>`;
+      strip.appendChild(c);
+    }
+
+    document.getElementById('updated').textContent =
+      `Updated ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})} · Open-Meteo`;
+
+  } catch(err) {
+    console.error(err);
+    document.getElementById('errbox').style.display = 'block';
+    document.getElementById('errmsg').textContent = err.message + '. Check internet connection and tap Refresh.';
+    document.getElementById('rval').textContent = 'ERROR';
+    document.getElementById('rdesc').textContent = 'Load failed';
+    document.getElementById('updated').textContent = 'Failed — tap Refresh';
+  }
+  si.className = '';
+}
+
+load();
+setInterval(load, 30*60*1000);
+</script>
+</body>
+</html>
